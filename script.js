@@ -81,28 +81,31 @@ fetch("tables.json")
                     word.textContent = data[maincategory][category][subcategory].word;
                     word.classList.add("greek-word");
 
-                    const button = document.createElement("button");
-                    button.textContent = "表を表示";
-
-                    const table = document.createElement("table")
-                    table.style.display = "none";
-
-                    button.onclick = function() {
-                        if (table.style.display === "none") {
-                            table.style.display = "block";
-                            button.textContent = "表を非表示";
-                        } else {
-                            table.style.display = "none";
-                            button.textContent = "表を表示";
-                        }
-                    }
-
                     //名詞処理
                     if (data[maincategory].id === "noun") {
                         section2.classList.add("declension-card");
 
                         const declension = data[maincategory][category][subcategory].declension;
                         const cases = Object.keys(declension);
+                        
+                        const table = document.createElement("table")
+                        table.style.display = "none";
+
+                        const thead = document.createElement("thead");
+                        const tbody = document.createElement("tbody");
+                        
+                        const button = document.createElement("button");
+                        button.textContent = "表を表示";
+
+                        button.onclick = function() {
+                            if (table.style.display === "none") {
+                                table.style.display = "block";
+                                button.textContent = "表を非表示";
+                            } else {
+                                table.style.display = "none";
+                                button.textContent = "表を表示";
+                            }
+                        }
 
                         const baseRow = document.createElement("tr");
 
@@ -119,7 +122,7 @@ fetch("tables.json")
                         basePl.textContent = "複数";
                         baseRow.appendChild(basePl);
 
-                        table.appendChild(baseRow);
+                        thead.appendChild(baseRow);
 
                         for (const caseName of cases) {
 
@@ -140,8 +143,12 @@ fetch("tables.json")
                             row.appendChild(sgCell);
                             row.appendChild(plCell);
                             
-                            table.appendChild(row);
+                            tbody.appendChild(row);
+
+                            table.appendChild(tbody);
                         }
+
+                        table.appendChild(thead);
 
                         section2.appendChild(heading4);
                         section2.appendChild(word);
