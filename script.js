@@ -220,6 +220,9 @@ fetch("tables.json")
                                 const table = document.createElement("table")
                                 table.style.display = "none";
 
+                                const thead = document.createElement("thead");
+                                const tbody = document.createElement("tbody");
+
                                 button.onclick = function() {
                                     if (table.style.display === "none") {
                                         table.style.display = "block";
@@ -255,7 +258,7 @@ fetch("tables.json")
                                 basePl.textContent = "複数";
                                 baseRow.appendChild(basePl);
 
-                                table.appendChild(baseRow);
+                                thead.appendChild(baseRow);
 
                                 for (const person of persons) {
 
@@ -287,8 +290,12 @@ fetch("tables.json")
                                         row.appendChild(infCell);
                                     };
                                     
-                                    table.appendChild(row);
+                                    tbody.appendChild(row);
+                                    table.appendChild(tbody);
                                 }
+
+                                table.appendChild(thead);
+
                                 section4.appendChild(heading6)
                                 section4.appendChild(button);
 
