@@ -255,7 +255,7 @@ fetch("tables.json")
                                     const row = document.createElement("tr");
 
                                     const personCell = document.createElement("th");
-                                    personCell.textContent = person;
+                                    personCell.textContent = person === "inf" ? "不定詞" : person;
 
                                     row.appendChild(personCell);
 
@@ -272,12 +272,12 @@ fetch("tables.json")
                                         row.appendChild(plCell);
                                     }
                                     else {
-                                        for (let i = 0; i < 2; i++){
-                                            const infCell = document.createElement("td");
-                                            infCell.textContent = conjugation[person];
-                                            infCell.classList.add("greek", "infinitive");
-                                            row.appendChild(infCell);
-                                        }
+                                        const infCell = document.createElement("td");
+                                        infCell.textContent = conjugation[person];
+                                        infCell.classList.add("greek", "infinitive");
+                                        infCell.colSpan = 2;
+
+                                        row.appendChild(infCell);
                                     };
                                     
                                     table.appendChild(row);
