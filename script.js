@@ -187,13 +187,15 @@ fetch("tables.json")
                             
                             const tense = document.createElement("h5");
                             tense.textContent = subsubcategory;
-                            tense.id = subsubcategory;
+
+                            const tenseId = heading4.id + "-" + subsubcategory;
+                            tense.id = tenseId;
                             
                             const subsubsubUl = document.createElement("ul");
                             const subsubsubLi = document.createElement("li");
                             const subsubsubLink = document.createElement("a");
                             subsubsubLink.textContent = subsubcategory;
-                            subsubsubLink.href = "#" + subsubcategory;
+                            subsubsubLink.href = "#" + tenseId;
                             subsubsubLi.appendChild(subsubsubLink);
                             subsubsubUl.appendChild(subsubsubLi);
 
