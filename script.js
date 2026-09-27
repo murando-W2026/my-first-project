@@ -16,6 +16,58 @@ function createToggleButton(table) {
     return button;
 }
 
+function createNounTable(declension) {
+    const table = document.createElement("table");
+
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
+
+    const baseRow = document.createElement("tr");
+
+    const baseCase = document.createElement("th");
+    baseCase.textContent = "格";
+    baseCase.scope = "col";
+
+    const baseSg = document.createElement("th");
+    baseSg.textContent = "単数";
+    baseSg.scope = "col";
+
+    const basePl = document.createElement("th");
+    basePl.textContent = "複数";
+    basePl.scope = "col";
+
+    baseRow.appendChild(baseCase);
+    baseRow.appendChild(baseSg);
+    baseRow.appendChild(basePl);
+    thead.appendChild(baseRow);
+
+    for (const caseName of Object.keys(declension)) {
+        const row = document.createElement("tr");
+
+        const caseCell = document.createElement("th");
+        caseCell.textContent = caseName;
+        caseCell.scope = "row";
+
+        const sgCell = document.createElement("td");
+        sgCell.textContent = declension[caseName].sg;
+        sgCell.classList.add("greek");
+
+        const plCell = document.createElement("td");
+        plCell.textContent = declension[caseName].pl;
+        plCell.classList.add("greek");
+
+        row.appendChild(caseCell);
+        row.appendChild(sgCell);
+        row.appendChild(plCell);
+        tbody.appendChild(row);
+    }
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+
+    return table;
+}
+
 fetch("tables.json")
     .then(response => response.json())
     .then(data => {
@@ -104,64 +156,16 @@ fetch("tables.json")
                         section2.classList.add("declension-card");
 
                         const declension = data[maincategory][category][subcategory].declension;
-                        const cases = Object.keys(declension);
-                        
-                        const table = document.createElement("table")
+
+                        const table = createNounTable(declension);
                         table.style.display = "none";
 
                         const button = createToggleButton(table);
-
-                        const thead = document.createElement("thead");
-                        const tbody = document.createElement("tbody");
-                        
-                        const baseRow = document.createElement("tr");
-
-                        const baseCase = document.createElement("th")
-                        const baseSg = document.createElement("th")
-                        const basePl = document.createElement("th")
-
-                        baseCase.textContent = "格";
-                        baseRow.appendChild(baseCase);
-
-                        baseSg.textContent = "単数";
-                        baseRow.appendChild(baseSg);
-
-                        basePl.textContent = "複数";
-                        baseRow.appendChild(basePl);
-
-                        thead.appendChild(baseRow);
-
-                        for (const caseName of cases) {
-
-                            const row = document.createElement("tr");
-
-                            const caseCell = document.createElement("th");
-                            caseCell.textContent = caseName;
-
-                            const sgCell = document.createElement("td");
-                            sgCell.textContent = declension[caseName].sg;
-                            sgCell.classList.add("greek");
-
-                            const plCell = document.createElement("td")
-                            plCell.textContent = declension[caseName].pl;
-                            plCell.classList.add("greek");
-
-                            row.appendChild(caseCell);
-                            row.appendChild(sgCell);
-                            row.appendChild(plCell);
-                            
-                            tbody.appendChild(row);
-                            
-                        }
-
-                        table.appendChild(thead);
-                        table.appendChild(tbody);
 
                         section2.appendChild(heading4);
                         section2.appendChild(word);
                         section2.appendChild(button);
                         section2.appendChild(table);
-
                         
                     } 
                     
