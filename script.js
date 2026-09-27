@@ -133,6 +133,49 @@ function createVerbTable(conjugation) {
     return table;
 }
 
+function createNounCard(nounType, nounData) {
+    const section = document.createElement("section");
+    section.classList.add("declension-card");
+
+    const heading = document.createElement("h4");
+    heading.textContent = nounType;
+
+    const word = document.createElement("p");
+    word.textContent = nounData.word;
+    word.classList.add("greek-word");
+
+    const table = createNounTable(nounData.declension);
+    table.style.display = "none";
+
+    const button = createToggleButton(table);
+
+    section.appendChild(heading);
+    section.appendChild(word);
+    section.appendChild(button);
+    section.appendChild(table);
+
+    return section;
+}
+
+function createVoiceSection(voice, conjugation) {
+    const section = document.createElement("section");
+    section.classList.add("subsubconjugation-card")
+
+    const heading = document.createElement("h6");
+    heading.textContent = voice;
+
+    const table = createVerbTable(conjugation);
+    table.style.display = "none";
+
+    const button = createToggleButton(table);
+
+    section.appendChild(heading);
+    section.appendChild(button);
+    section.appendChild(table);
+
+    return section;
+}
+
 fetch("tables.json")
     .then(response => response.json())
     .then(data => {
@@ -201,9 +244,16 @@ fetch("tables.json")
 
                 for (const subcategory of subcategories) {
 
-                    console.log(subcategory);
-
                     if (subcategory === "id") {
+                        continue;
+                    }
+
+                    const itemData = data[maincategory][category][subcategory];
+
+                    if (data[maincategory].id === "noun") {
+                        const nounSection = createNounCard(subcategory, itemData);
+
+                        section1.appendChild(nounSection);
                         continue;
                     }
 
@@ -215,27 +265,9 @@ fetch("tables.json")
                     const word = document.createElement("p");
                     word.textContent = data[maincategory][category][subcategory].word;
                     word.classList.add("greek-word");
-
-                    //名詞処理
-                    if (data[maincategory].id === "noun") {
-                        section2.classList.add("declension-card");
-
-                        const declension = data[maincategory][category][subcategory].declension;
-
-                        const table = createNounTable(declension);
-                        table.style.display = "none";
-
-                        const button = createToggleButton(table);
-
-                        section2.appendChild(heading4);
-                        section2.appendChild(word);
-                        section2.appendChild(button);
-                        section2.appendChild(table);
-                        
-                    } 
                     
                     // 動詞処理
-                    else if (data[maincategory].id === "verb") {
+                    if (data[maincategory].id === "verb") {
 
                         if (subcategory === "id") {
                             continue;
@@ -290,27 +322,11 @@ fetch("tables.json")
 
                             for (const voice of voices) {
 
-                                const section4 = document.createElement("section");
-                                section4.classList.add("subsubconjugation-card"); 
+                                const conjugation = itemData[subsubcategory][voice];
 
-                                const heading6 = document.createElement("h6");
-                                heading6.textContent = voice;
+                                const voiceSection = createVoiceSection(voice, conjugation);
 
-                                const conjugation = data[maincategory][category][subcategory][subsubcategory][voice];
-
-                                const table = createVerbTable(conjugation);
-                                table.style.display = "none";
-                                
-                                const button = createToggleButton(table);
-
-                                section4.appendChild(heading6)
-                                section4.appendChild(button);
-
-                                section4.appendChild(table);
-                                
-                                console.log(section4)
-
-                                section3.appendChild(section4)
+                                section3.appendChild(voiceSection);
                                 
                             }    
                             section2.appendChild(section3) 
