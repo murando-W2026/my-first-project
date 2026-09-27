@@ -144,11 +144,11 @@ fetch("tables.json")
                             row.appendChild(plCell);
                             
                             tbody.appendChild(row);
-
-                            table.appendChild(tbody);
+                            
                         }
 
                         table.appendChild(thead);
+                        table.appendChild(tbody);
 
                         section2.appendChild(heading4);
                         section2.appendChild(word);
@@ -291,10 +291,10 @@ fetch("tables.json")
                                     };
                                     
                                     tbody.appendChild(row);
-                                    table.appendChild(tbody);
                                 }
 
                                 table.appendChild(thead);
+                                table.appendChild(tbody);
 
                                 section4.appendChild(heading6)
                                 section4.appendChild(button);
