@@ -1,3 +1,21 @@
+function createToggleButton(table) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "表を表示";
+
+    button.addEventListener("click", function() {
+        if (table.style.display === "none") {
+            table.style.display = "block";
+            button.textContent = "表を非表示";
+        } else {
+            table.style.display = "none";
+            button.textContent = "表を表示";
+        }
+    });
+
+    return button;
+}
+
 fetch("tables.json")
     .then(response => response.json())
     .then(data => {
@@ -91,22 +109,11 @@ fetch("tables.json")
                         const table = document.createElement("table")
                         table.style.display = "none";
 
+                        const button = createToggleButton(table);
+
                         const thead = document.createElement("thead");
                         const tbody = document.createElement("tbody");
                         
-                        const button = document.createElement("button");
-                        button.textContent = "表を表示";
-
-                        button.onclick = function() {
-                            if (table.style.display === "none") {
-                                table.style.display = "block";
-                                button.textContent = "表を非表示";
-                            } else {
-                                table.style.display = "none";
-                                button.textContent = "表を表示";
-                            }
-                        }
-
                         const baseRow = document.createElement("tr");
 
                         const baseCase = document.createElement("th")
@@ -214,24 +221,13 @@ fetch("tables.json")
 
                             for (const voice of voices) {
 
-                                const button = document.createElement("button");
-                                button.textContent = "表を表示";
-
                                 const table = document.createElement("table")
                                 table.style.display = "none";
+                                
+                                const button = createToggleButton(table);
 
                                 const thead = document.createElement("thead");
                                 const tbody = document.createElement("tbody");
-
-                                button.onclick = function() {
-                                    if (table.style.display === "none") {
-                                        table.style.display = "block";
-                                        button.textContent = "表を非表示";
-                                    } else {
-                                        table.style.display = "none";
-                                        button.textContent = "表を表示";
-                                    }
-                                }
 
                                 // console.log(voice)
                                 const section4 = document.createElement("section");
