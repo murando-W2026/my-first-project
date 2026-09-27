@@ -1,3 +1,13 @@
+:root {
+    --page-background: #f7f4ee;
+    --surface: #fffdf8;
+    --text: #2c2924;
+    --border: #d8d0c4;
+    --accent: #365f71;
+    --accent-soft: #e7eff1;
+    --table-body: #f1f6f5;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -7,8 +17,8 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 30px;
-    background-color: #f5f5f5;
-    color: #333333;
+    background-color: var(--page-background);
+    color: var(--text);
 }
 
 
@@ -65,7 +75,6 @@ h2 {
 nav {
     border: 1px solid;
     padding: 5px;
-    background-color: white;
 }
 
 ul {
@@ -101,11 +110,12 @@ h4 {
 }
 
 thead {
-    background-color: rgb(52, 155, 224);
+    background-color: var(--accent);
+    color: white;
 }
 
 tbody {
-    background-color: rgb(119, 221, 196);
+    background-color: var(--table-body);
 }
 
 button {
@@ -132,11 +142,9 @@ td {
 .card {
     display: flex;
     flex-wrap: wrap;
-    background-color: white;
     border-radius: 4px;
     padding: 25px;
     margin: 40px 0;
-    box-shadow: 0 3px 10px rgba(255, 0, 0, 0.1);
 }
 
 .declension-card {
@@ -152,8 +160,13 @@ td {
 table {
     width: fit-content;
     max-width: none;
-    background-color: white;
     border-collapse: collapse;
+}
+
+nav,
+.card,
+table {
+    background-color: var(--surface);
 }
 
 .conjugation-card {
@@ -167,7 +180,6 @@ table {
 }
 
 .subconjugation-card {
-    background-color: rgb(175, 172, 172);
     border-radius: 20px;
     padding: 20px;
     margin: 20px 0;
@@ -176,9 +188,16 @@ table {
 }
 
 .subsubconjugation-card {
-    background-color: rgb(157, 191, 214);
     border-radius: 10px;
 
     margin: 10px;
     padding: 10px;
+}
+
+th,
+td,
+.declension-card,
+.conjugation-card,
+.subconjugation-card {
+    border-color: var(--border);
 }
