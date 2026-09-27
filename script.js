@@ -68,6 +68,71 @@ function createNounTable(declension) {
     return table;
 }
 
+function createVerbTable(conjugation) {
+    const table = document.createElement("table");
+
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
+
+    const baseRow = document.createElement("tr");
+
+    const basePerson = document.createElement("th");
+    basePerson.textContent = "人称";
+    basePerson.scope = "col";
+
+    const baseSg = document.createElement("th");
+    baseSg.textContent = "単数";
+    baseSg.scope = "col";
+
+    const basePl = document.createElement("th");
+    basePl.textContent = "複数";
+    basePl.scope = "col";
+
+    baseRow.appendChild(basePerson);
+    baseRow.appendChild(baseSg);
+    baseRow.appendChild(basePl);
+    thead.appendChild(baseRow);
+
+    for (const person of Object.keys(conjugation)) {
+
+        const row = document.createElement("tr");
+
+        const personCell = document.createElement("th");
+        personCell.textContent = person === "inf" ? "不定詞" : person;
+        personCell.scope = "row";
+
+        row.appendChild(personCell);
+
+        if (person === "inf") {
+            const infCell = document.createElement("td");
+            infCell.textContent = conjugation[person];
+            infCell.classList.add("greek", "infinitive");
+            infCell.colSpan = 2;
+
+            row.appendChild(infCell);
+        }
+        else {
+            const sgCell = document.createElement("td");
+            sgCell.textContent = conjugation[person].sg;
+            sgCell.classList.add("greek");
+
+            const plCell = document.createElement("td")
+            plCell.textContent = conjugation[person].pl;
+            plCell.classList.add("greek");
+
+            row.appendChild(sgCell);
+            row.appendChild(plCell);
+        };
+        
+        tbody.appendChild(row);
+    }
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+
+    return table;
+}
+
 fetch("tables.json")
     .then(response => response.json())
     .then(data => {
@@ -225,15 +290,6 @@ fetch("tables.json")
 
                             for (const voice of voices) {
 
-                                const table = document.createElement("table")
-                                table.style.display = "none";
-                                
-                                const button = createToggleButton(table);
-
-                                const thead = document.createElement("thead");
-                                const tbody = document.createElement("tbody");
-
-                                // console.log(voice)
                                 const section4 = document.createElement("section");
                                 section4.classList.add("subsubconjugation-card"); 
 
@@ -241,60 +297,11 @@ fetch("tables.json")
                                 heading6.textContent = voice;
 
                                 const conjugation = data[maincategory][category][subcategory][subsubcategory][voice];
-                                const persons = Object.keys(conjugation);
 
-                                const baseRow = document.createElement("tr");
-
-                                const basePerson = document.createElement("th")
-                                const baseSg = document.createElement("th")
-                                const basePl = document.createElement("th")
-
-                                basePerson.textContent = "人称";
-                                baseRow.appendChild(basePerson);
-
-                                baseSg.textContent = "単数";
-                                baseRow.appendChild(baseSg);
-
-                                basePl.textContent = "複数";
-                                baseRow.appendChild(basePl);
-
-                                thead.appendChild(baseRow);
-
-                                for (const person of persons) {
-
-                                    const row = document.createElement("tr");
-
-                                    const personCell = document.createElement("th");
-                                    personCell.textContent = person === "inf" ? "不定詞" : person;
-
-                                    row.appendChild(personCell);
-
-                                    if (person !== "inf") {
-                                        const sgCell = document.createElement("td");
-                                        sgCell.textContent = conjugation[person].sg;
-                                        sgCell.classList.add("greek");
-
-                                        const plCell = document.createElement("td")
-                                        plCell.textContent = conjugation[person].pl;
-                                        plCell.classList.add("greek");
-
-                                        row.appendChild(sgCell);
-                                        row.appendChild(plCell);
-                                    }
-                                    else {
-                                        const infCell = document.createElement("td");
-                                        infCell.textContent = conjugation[person];
-                                        infCell.classList.add("greek", "infinitive");
-                                        infCell.colSpan = 2;
-
-                                        row.appendChild(infCell);
-                                    };
-                                    
-                                    tbody.appendChild(row);
-                                }
-
-                                table.appendChild(thead);
-                                table.appendChild(tbody);
+                                const table = createVerbTable(conjugation);
+                                table.style.display = "none";
+                                
+                                const button = createToggleButton(table);
 
                                 section4.appendChild(heading6)
                                 section4.appendChild(button);
