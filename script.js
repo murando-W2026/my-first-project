@@ -16,7 +16,7 @@ function createToggleButton(table) {
     return button;
 }
 
-function createTocBranch(label, targetId) {
+function createTocBranch(label, targetId, children = []) {
     const ul = document.createElement("ul");
     const li = document.createElement("li");
     const link = document.createElement("a");
@@ -25,6 +25,11 @@ function createTocBranch(label, targetId) {
     link.href = "#" + targetId;
 
     li.appendChild(link);
+
+    for (const child of children) {
+        li.appendChild(child);
+    }
+
     ul.appendChild(li);
 
     return ul;
@@ -122,6 +127,8 @@ function createVerbCard (verbType, verbId, verbData) {
     section.appendChild(heading);
     section.appendChild(word);
 
+    const tenseTocBranches = [];
+
     for (const tense of Object.keys(verbData)) {
         if (tense === "id" || tense === "word") {
             continue;
@@ -133,10 +140,18 @@ function createVerbCard (verbType, verbId, verbData) {
 
         const tenseSection = createTenseSection(tense, tenseId, voices);
 
+        const tenseTocBranch = createTocBranch(tense, tenseId);
+
         section.appendChild(tenseSection);
+        tenseTocBranches.push(tenseTocBranch);
     }
 
-    return section;
+    const verbTocBranch = createTocBranch(verbType, verbId, tenseTocBranches)
+
+    return {
+        section: section,
+        tocBranch: verbTocBranch
+    };
 }
 
 function createTenseSection(tense, tenseId, voices) {
@@ -327,12 +342,12 @@ fetch("tables.json")
                         continue;
                     } else if (data[maincategory].id === "verb") {
                         const verbId = data[maincategory][category][subcategory].id
-                        const verbSection = createVerbCard(subcategory, verbId, itemData);
+                        const verbResult = createVerbCard(subcategory, verbId, itemData);
                         
-                        const verbTocBranch = createTocBranch(subcategory, verbId);
+                        console.log(verbResult.tocBranch)
 
-                        section1.appendChild(verbSection);
-                        subLi.appendChild(verbTocBranch);
+                        section1.appendChild(verbResult.section);
+                        subLi.appendChild(verbResult.tocBranch);
 
                         continue;
                     }
