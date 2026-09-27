@@ -16,6 +16,20 @@ function createToggleButton(table) {
     return button;
 }
 
+function createTocBranch(label, targetId) {
+    const ul = document.createElement("ul");
+    const li = document.createElement("li");
+    const link = document.createElement("a");
+
+    link.textContent = label;
+    link.href = "#" + targetId;
+
+    li.appendChild(link);
+    ul.appendChild(li);
+
+    return ul;
+}
+
 function createNounCard(nounType, nounData) {
     const section = document.createElement("section");
     section.classList.add("declension-card");
@@ -92,23 +106,53 @@ function createNounTable(declension) {
     return table;
 }
 
-function createTenseSection(tense, voices) {
+function createVerbCard (verbType, verbId, verbData) {
+
+    const section = document.createElement("section");
+    section.classList.add("conjugation-card");
+
+    const heading = document.createElement("h4");
+    heading.textContent = verbType;
+    heading.id = verbId
+
+    const word = document.createElement("p");
+    word.textContent = verbData.word;
+    word.classList.add("greek-word");
+
+    section.appendChild(heading);
+    section.appendChild(word);
+
+    for (const tense of Object.keys(verbData)) {
+        if (tense === "id" || tense === "word") {
+            continue;
+        }
+
+        const tenseId = heading.id + "-" + tense;
+
+        const voices = verbData[tense];
+
+        const tenseSection = createTenseSection(tense, tenseId, voices);
+
+        section.appendChild(tenseSection);
+    }
+
+    return section;
+}
+
+function createTenseSection(tense, tenseId, voices) {
 
     const section = document.createElement("section");
     section.classList.add("subconjugation-card")
                             
     const heading = document.createElement("h5");
     heading.textContent = tense;
+    heading.id = tenseId;
 
     section.appendChild(heading);
-
-    // console.log(voices);
 
     for (const voice of Object.keys(voices)) {
 
         const conjugation = voices[voice];
-
-        console.log(voices[voice]);
 
         const voiceSection = createVoiceSection(voice, conjugation);
 
@@ -281,69 +325,17 @@ fetch("tables.json")
 
                         section1.appendChild(nounSection);
                         continue;
+                    } else if (data[maincategory].id === "verb") {
+                        const verbId = data[maincategory][category][subcategory].id
+                        const verbSection = createVerbCard(subcategory, verbId, itemData);
+                        
+                        const verbTocBranch = createTocBranch(subcategory, verbId);
+
+                        section1.appendChild(verbSection);
+                        subLi.appendChild(verbTocBranch);
+
+                        continue;
                     }
-
-                    const section2 = document.createElement("section");
-
-                    const heading4 = document.createElement("h4");
-                    heading4.textContent = subcategory;
-
-                    const word = document.createElement("p");
-                    word.textContent = data[maincategory][category][subcategory].word;
-                    word.classList.add("greek-word");
-                    
-                    // 動詞処理
-                    if (data[maincategory].id === "verb") {
-
-                        if (subcategory === "id") {
-                            continue;
-                        }
-
-                        section2.classList.add("conjugation-card");
-
-                        section2.appendChild(heading4);
-                        section2.appendChild(word);
-    
-                        heading4.id = data[maincategory][category][subcategory].id
-                        const subsubUl = document.createElement("ul");
-                        const subsubLi = document.createElement("li");
-                        const subsubLink = document.createElement("a");
-                        subsubLink.textContent = subcategory;
-                        subsubLink.href = "#" + data[maincategory][category][subcategory].id;
-                        subsubLi.appendChild(subsubLink);
-                        subsubUl.appendChild(subsubLi);
-
-                        subLi.appendChild(subsubUl);
-
-                        const subsubcategories = Object.keys(data[maincategory][category][subcategory]);
-
-                        for (const subsubcategory of subsubcategories) {
-
-                            if (subsubcategory === "id" || subsubcategory === "word") {
-                                continue;
-                            }
-
-                            const tenseId = heading4.id + "-" + subsubcategory;
-                            // tense.id = tenseId;
-                            
-                            const subsubsubUl = document.createElement("ul");
-                            const subsubsubLi = document.createElement("li");
-                            const subsubsubLink = document.createElement("a");
-                            subsubsubLink.textContent = subsubcategory;
-                            subsubsubLink.href = "#" + tenseId;
-                            subsubsubLi.appendChild(subsubsubLink);
-                            subsubsubUl.appendChild(subsubsubLi);
-
-                            subsubLi.appendChild(subsubsubUl);
-
-                            const voices = data[maincategory][category][subcategory][subsubcategory];
-
-                            const tenseSection = createTenseSection(subsubcategory, voices);
-
-                            section2.appendChild(tenseSection);
-                        }
-                    }
-                    section1.appendChild(section2);
                 }
                 container.appendChild(section1)
             }
