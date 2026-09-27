@@ -715,6 +715,32 @@
         }
     },
 
+    "代名詞": {
+        "id": "pronoun",
+        "指示代名詞": {
+            "id": "pronoun-intensive"
+        },
+        "強意代名詞": {
+            "id": "pronoun-demonstrative"
+        },
+        "疑問代名詞": {
+            "id": "pronoun-interrogative"
+        },
+        "不定代名詞": {
+            "id": "pronoun-indefinite"
+        },
+        "関係代名詞": {
+            "id": "pronoun-relative"
+        },
+        "人称代名詞": {
+            "id": "pronoun-personal"
+        }
+    },
+
+    "形容詞": {
+        "id": "adjective"
+    },
+
     "動詞": {
         "id": "verb",
         "ω動詞": {
