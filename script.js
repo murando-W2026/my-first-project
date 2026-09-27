@@ -16,6 +16,30 @@ function createToggleButton(table) {
     return button;
 }
 
+function createNounCard(nounType, nounData) {
+    const section = document.createElement("section");
+    section.classList.add("declension-card");
+
+    const heading = document.createElement("h4");
+    heading.textContent = nounType;
+
+    const word = document.createElement("p");
+    word.textContent = nounData.word;
+    word.classList.add("greek-word");
+
+    const table = createNounTable(nounData.declension);
+    table.style.display = "none";
+
+    const button = createToggleButton(table);
+
+    section.appendChild(heading);
+    section.appendChild(word);
+    section.appendChild(button);
+    section.appendChild(table);
+
+    return section;
+}
+
 function createNounTable(declension) {
     const table = document.createElement("table");
 
@@ -66,6 +90,51 @@ function createNounTable(declension) {
     table.appendChild(tbody);
 
     return table;
+}
+
+function createTenseSection(tense, voices) {
+
+    const section = document.createElement("section");
+    section.classList.add("subconjugation-card")
+                            
+    const heading = document.createElement("h5");
+    heading.textContent = tense;
+
+    section.appendChild(heading);
+
+    // console.log(voices);
+
+    for (const voice of Object.keys(voices)) {
+
+        const conjugation = voices[voice];
+
+        console.log(voices[voice]);
+
+        const voiceSection = createVoiceSection(voice, conjugation);
+
+        section.appendChild(voiceSection);
+    }
+
+    return section;
+}
+
+function createVoiceSection(voice, conjugation) {
+    const section = document.createElement("section");
+    section.classList.add("subsubconjugation-card")
+
+    const heading = document.createElement("h6");
+    heading.textContent = voice;
+
+    const table = createVerbTable(conjugation);
+    table.style.display = "none";
+
+    const button = createToggleButton(table);
+
+    section.appendChild(heading);
+    section.appendChild(button);
+    section.appendChild(table);
+
+    return section;
 }
 
 function createVerbTable(conjugation) {
@@ -131,49 +200,6 @@ function createVerbTable(conjugation) {
     table.appendChild(tbody);
 
     return table;
-}
-
-function createNounCard(nounType, nounData) {
-    const section = document.createElement("section");
-    section.classList.add("declension-card");
-
-    const heading = document.createElement("h4");
-    heading.textContent = nounType;
-
-    const word = document.createElement("p");
-    word.textContent = nounData.word;
-    word.classList.add("greek-word");
-
-    const table = createNounTable(nounData.declension);
-    table.style.display = "none";
-
-    const button = createToggleButton(table);
-
-    section.appendChild(heading);
-    section.appendChild(word);
-    section.appendChild(button);
-    section.appendChild(table);
-
-    return section;
-}
-
-function createVoiceSection(voice, conjugation) {
-    const section = document.createElement("section");
-    section.classList.add("subsubconjugation-card")
-
-    const heading = document.createElement("h6");
-    heading.textContent = voice;
-
-    const table = createVerbTable(conjugation);
-    table.style.display = "none";
-
-    const button = createToggleButton(table);
-
-    section.appendChild(heading);
-    section.appendChild(button);
-    section.appendChild(table);
-
-    return section;
 }
 
 fetch("tables.json")
@@ -297,14 +323,8 @@ fetch("tables.json")
                                 continue;
                             }
 
-                            const section3 = document.createElement("section");
-                            section3.classList.add("subconjugation-card")
-                            
-                            const tense = document.createElement("h5");
-                            tense.textContent = subsubcategory;
-
                             const tenseId = heading4.id + "-" + subsubcategory;
-                            tense.id = tenseId;
+                            // tense.id = tenseId;
                             
                             const subsubsubUl = document.createElement("ul");
                             const subsubsubLi = document.createElement("li");
@@ -316,20 +336,11 @@ fetch("tables.json")
 
                             subsubLi.appendChild(subsubsubUl);
 
-                            section3.appendChild(tense)
+                            const voices = data[maincategory][category][subcategory][subsubcategory];
 
-                            const voices = Object.keys(data[maincategory][category][subcategory][subsubcategory]);
+                            const tenseSection = createTenseSection(subsubcategory, voices);
 
-                            for (const voice of voices) {
-
-                                const conjugation = itemData[subsubcategory][voice];
-
-                                const voiceSection = createVoiceSection(voice, conjugation);
-
-                                section3.appendChild(voiceSection);
-                                
-                            }    
-                            section2.appendChild(section3) 
+                            section2.appendChild(tenseSection);
                         }
                     }
                     section1.appendChild(section2);
