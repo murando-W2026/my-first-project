@@ -111,6 +111,112 @@ function createNounTable(declension) {
     return table;
 }
 
+function createPronounCard(pronounType, pronounData) {
+    const section = document.createElement("section");
+    section.classList.add("declension-card");
+
+    console.log(pronounData)
+    const heading = document.createElement("h4");
+    heading.textContent = pronounType;
+
+    const word = document.createElement("p");
+    word.textContent = pronounData.word;
+    word.classList.add("greek-word");
+
+    const table = createPronounTable(pronounData.declension);
+    table.style.display = "none";
+
+    const button = createToggleButton(table);
+
+    section.appendChild(heading);
+    section.appendChild(word);
+    section.appendChild(button);
+    section.appendChild(table);
+
+    return section;
+}
+
+function createPronounTable(declension) {
+    const table = document.createElement("table");
+
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
+
+    const genderRow = document.createElement("tr");
+
+    const baseCase = document.createElement("th");
+    baseCase.textContent = "格";
+    baseCase.rowSpan = 2;
+    baseCase.scope = "col";
+
+    const genderM = document.createElement("th");
+    genderM.textContent = "男性";
+    genderM.colSpan = 2;
+    baseCase.scope = "col";
+
+    const genderF = document.createElement("th");
+    genderF.textContent = "女性";
+    genderF.colSpan = 2;
+    baseCase.scope = "col";
+
+    const genderN = document.createElement("th");
+    genderN.textContent = "中性";
+    genderN.colSpan = 2;
+    baseCase.scope = "col";
+
+    genderRow.appendChild(baseCase)
+    genderRow.appendChild(genderM)
+    genderRow.appendChild(genderF)
+    genderRow.appendChild(genderN)
+
+    thead.appendChild(genderRow)
+
+    const baseRow = document.createElement("tr");
+
+    for (let i = 0; i < 3 ; i++) {
+        const baseSg = document.createElement("th");
+        baseSg.textContent = "単数";
+        baseSg.scope = "col";
+
+        const basePl = document.createElement("th");
+        basePl.textContent = "複数";
+        basePl.scope = "col";
+        
+        baseRow.appendChild(baseSg);
+        baseRow.appendChild(basePl);
+    }
+    
+    thead.appendChild(baseRow);
+
+    for (const caseName of Object.keys(declension)) {
+        const row = document.createElement("tr");
+
+        const caseCell = document.createElement("th");
+        caseCell.textContent = caseName;
+        caseCell.scope = "row";
+
+        row.appendChild(caseCell);
+        for (const gender of Object.keys(declension[caseName])) {
+            const sgCell = document.createElement("td");
+            sgCell.textContent = declension[caseName][gender].sg;
+            sgCell.classList.add("greek");
+
+            const plCell = document.createElement("td");
+            plCell.textContent = declension[caseName][gender].pl;
+            plCell.classList.add("greek");
+
+            row.appendChild(sgCell);
+            row.appendChild(plCell);
+        }
+        tbody.appendChild(row);
+    }
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+
+    return table;
+}
+
 function createVerbCard (verbType, verbId, verbData) {
 
     const section = document.createElement("section");
@@ -327,6 +433,15 @@ fetch("tables.json")
 
                 mainLi.appendChild(subUl);
 
+                if (data[maincategory].id === "pronoun") {
+                    const itemData = data[maincategory][category]
+                    const pronounSection = createPronounCard(category, itemData);
+
+                    section1.appendChild(pronounSection);
+                    container.appendChild(section1)
+                    continue;
+                }
+
                 for (const subcategory of subcategories) {
 
                     if (subcategory === "id") {
@@ -339,17 +454,13 @@ fetch("tables.json")
                         const nounSection = createNounCard(subcategory, itemData);
 
                         section1.appendChild(nounSection);
-                        continue;
+
                     } else if (data[maincategory].id === "verb") {
                         const verbId = data[maincategory][category][subcategory].id
                         const verbResult = createVerbCard(subcategory, verbId, itemData);
-                        
-                        console.log(verbResult.tocBranch)
 
                         section1.appendChild(verbResult.section);
                         subLi.appendChild(verbResult.tocBranch);
-
-                        continue;
                     }
                 }
                 container.appendChild(section1)
