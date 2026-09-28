@@ -476,8 +476,12 @@ fetch("tables.json")
 
                 mainLi.appendChild(subUl);
 
-                if (data[maincategory].id === "pronoun") {
+                if (data[maincategory].id === "pronoun" || data[maincategory].id === "adjective") {
                     const itemData = data[maincategory][category]
+
+                    if (itemData.id === "adv_com_sup") {
+                        continue;
+                    }
                     const pronounSection = createPronounCard(category, itemData);
 
                     section1.appendChild(pronounSection);
