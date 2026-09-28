@@ -195,17 +195,17 @@ function createAllGenderTable(declension) {
     const genderM = document.createElement("th");
     genderM.textContent = "男性";
     genderM.colSpan = 2;
-    baseCase.scope = "col";
+    genderM.scope = "col";
 
     const genderF = document.createElement("th");
     genderF.textContent = "女性";
     genderF.colSpan = 2;
-    baseCase.scope = "col";
+    genderF.scope = "col";
 
     const genderN = document.createElement("th");
     genderN.textContent = "中性";
     genderN.colSpan = 2;
-    baseCase.scope = "col";
+    genderN.scope = "col";
 
     genderRow.appendChild(baseCase)
     genderRow.appendChild(genderM)
@@ -258,6 +258,138 @@ function createAllGenderTable(declension) {
     table.appendChild(tbody);
 
     return table;
+}
+
+function createComSupAdvCard(adjData) {
+    const section = document.createElement("section");
+
+    for (const type of Object.keys(adjData)) {
+        if (type === "id") {
+            continue;
+        }
+
+        const comSupAdvTypeData = adjData[type];
+        const comSupAdvTypeSection = createComSupAdvType(type, comSupAdvTypeData);
+
+        section.appendChild(comSupAdvTypeSection);
+    }
+
+    return section;
+}
+
+function createComSupAdvType(type, adjSubData) {
+    const section = document.createElement("section");
+    section.classList.add("declension-card");
+
+    const heading = document.createElement("h4");
+    heading.textContent = type;
+    section.appendChild(heading);
+
+    const word = document.createElement("p");
+    word.textContent = adjSubData.word;
+    word.classList.add("greek-word");
+
+    section.appendChild(heading);
+    section.appendChild(word);
+
+    for (const subType of Object.keys(adjSubData)) {
+        if (subType === "word"){
+            continue;
+        } else if (subType !== "adverbial") {
+
+            const declension = adjSubData[subType];
+            const comSupAdvSection = createComSupSection(subType, declension);
+            section.appendChild(comSupAdvSection);
+            
+        } else {
+            const declension = adjSubData[subType];
+            const advSection = createAdvSection(declension);
+            section.appendChild(advSection);
+        }
+    }
+    return section;
+}
+
+function createComSupSection(subType, declension) {
+    const section = document.createElement("section");
+    section.classList.add("declension-card");
+
+    const heading = document.createElement("h5")
+
+    if (subType === "comparative") {
+        heading.textContent = "比較級";
+    } else if (subType === "superlative") {
+        heading.textContent = "最上級";
+    }
+
+    section.appendChild(heading);
+
+    const table = createAllGenderTable(declension);
+
+    const button = createToggleButton(table);
+
+    section.appendChild(button);
+    section.appendChild(table);
+    table.style.display = "none";
+
+    return section;
+}
+
+function createAdvSection(declension) {
+    const section = document.createElement("section");
+    section.classList.add("declension-card");
+
+    const heading = document.createElement("h5");
+    heading.textContent = "副詞形";
+
+    section.appendChild(heading);
+
+    const table = document.createElement("table");
+
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
+
+    const baseRow = document.createElement("tr");
+
+    const baseAdv = document.createElement("th");
+    baseAdv.textContent = "副詞形";
+    baseAdv.scope = "col";
+
+    const baseCom = document.createElement("th");
+    baseCom.textContent = "比較級";
+    baseCom.scope = "col";
+
+    const baseSup = document.createElement("th");
+    baseSup.textContent = "最上級";
+    baseSup.scope = "col";
+
+    baseRow.appendChild(baseAdv);
+    baseRow.appendChild(baseCom);
+    baseRow.appendChild(baseSup);
+    thead.appendChild(baseRow);
+
+    const subRow = document.createElement("tr");
+
+    for (const word of Object.keys(declension)) {
+        const wordCell = document.createElement("td");
+        wordCell.textContent = declension[word];
+        wordCell.classList.add("greek-word")
+        
+        subRow.appendChild(wordCell);
+    }
+
+    tbody.appendChild(subRow);
+
+    table.appendChild(thead)
+    table.appendChild(tbody)
+
+    const button = createToggleButton(table);
+
+    section.appendChild(button);
+    section.appendChild(table);
+    table.style.display = "none";
+
+    return section;
 }
 
 function createVerbCard (verbType, verbId, verbData) {
@@ -477,14 +609,21 @@ fetch("tables.json")
                 mainLi.appendChild(subUl);
 
                 if (data[maincategory].id === "pronoun" || data[maincategory].id === "adjective") {
+
                     const itemData = data[maincategory][category]
 
                     if (itemData.id === "com_sup_adv") {
-                        continue;
-                    }
-                    const allGenderSection = createAllGenderCard(category, itemData);
 
-                    section1.appendChild(allGenderSection);
+                        const comSupAdvSection = createComSupAdvCard(itemData);
+                        section1.appendChild(comSupAdvSection);
+
+                    } else {
+
+                        const allGenderSection = createAllGenderCard(category, itemData);
+                        section1.appendChild(allGenderSection);
+
+                    }
+                    
                     container.appendChild(section1)
                     continue;
                 }
