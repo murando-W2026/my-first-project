@@ -111,21 +111,21 @@ function createNounTable(declension) {
     return table;
 }
 
-function createPronounCard(pronounType, pronounData) {
+function createAllGenderCard(allGenderType, allGenderData) {
     const section = document.createElement("section");
 
     const heading = document.createElement("h4");
-    heading.textContent = pronounType;
+    heading.textContent = allGenderType;
 
-    if (pronounData.id === "pronoun-demonstrative") {
+    if (allGenderData.id === "pronoun-demonstrative") {
 
-        for (const distinction of Object.keys(pronounData)) {
+        for (const distinction of Object.keys(allGenderData)) {
             
             if (distinction === "id"){
                 continue;
             }
 
-            const distinctionData = pronounData[distinction];
+            const distinctionData = allGenderData[distinction];
 
             const distinctionSection = createDemonstrativeCard(distinction, distinctionData);
 
@@ -138,10 +138,10 @@ function createPronounCard(pronounType, pronounData) {
         section.classList.add("declension-card");
 
         const word = document.createElement("p");
-        word.textContent = pronounData.word;
+        word.textContent = allGenderData.word;
         word.classList.add("greek-word");
 
-        const table = createPronounTable(pronounData.declension);
+        const table = createAllGenderTable(allGenderData.declension);
         table.style.display = "none";
 
         const button = createToggleButton(table);
@@ -166,7 +166,7 @@ function createDemonstrativeCard(distinction, distinctionData) {
     word.textContent = distinctionData.word;
     word.classList.add("greek-word");
 
-    const table = createPronounTable(distinctionData.declension);
+    const table = createAllGenderTable(distinctionData.declension);
     table.style.display = "none";
 
     const button = createToggleButton(table);
@@ -179,7 +179,7 @@ function createDemonstrativeCard(distinction, distinctionData) {
     return section;
 }
 
-function createPronounTable(declension) {
+function createAllGenderTable(declension) {
     const table = document.createElement("table");
 
     const thead = document.createElement("thead");
@@ -479,12 +479,12 @@ fetch("tables.json")
                 if (data[maincategory].id === "pronoun" || data[maincategory].id === "adjective") {
                     const itemData = data[maincategory][category]
 
-                    if (itemData.id === "adv_com_sup") {
+                    if (itemData.id === "com_sup_adv") {
                         continue;
                     }
-                    const pronounSection = createPronounCard(category, itemData);
+                    const allGenderSection = createAllGenderCard(category, itemData);
 
-                    section1.appendChild(pronounSection);
+                    section1.appendChild(allGenderSection);
                     container.appendChild(section1)
                     continue;
                 }
