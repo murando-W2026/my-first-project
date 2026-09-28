@@ -125,8 +125,6 @@ function createPronounCard(pronounType, pronounData) {
                 continue;
             }
 
-            console.log(distinction);
-
             const distinctionData = pronounData[distinction];
 
             const distinctionSection = createDemonstrativeCard(distinction, distinctionData);
@@ -148,7 +146,6 @@ function createPronounCard(pronounType, pronounData) {
 
         const button = createToggleButton(table);
 
-        section.appendChild(heading);
         section.appendChild(word);
         section.appendChild(button);
         section.appendChild(table);
