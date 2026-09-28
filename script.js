@@ -113,17 +113,63 @@ function createNounTable(declension) {
 
 function createPronounCard(pronounType, pronounData) {
     const section = document.createElement("section");
-    section.classList.add("declension-card");
 
-    console.log(pronounData)
     const heading = document.createElement("h4");
     heading.textContent = pronounType;
 
+    if (pronounData.id === "pronoun-demonstrative") {
+
+        for (const distinction of Object.keys(pronounData)) {
+            
+            if (distinction === "id"){
+                continue;
+            }
+
+            console.log(distinction);
+
+            const distinctionData = pronounData[distinction];
+
+            const distinctionSection = createDemonstrativeCard(distinction, distinctionData);
+
+            section.appendChild(distinctionSection);
+        }
+        
+        return section;
+    } else {
+
+        section.classList.add("declension-card");
+
+        const word = document.createElement("p");
+        word.textContent = pronounData.word;
+        word.classList.add("greek-word");
+
+        const table = createPronounTable(pronounData.declension);
+        table.style.display = "none";
+
+        const button = createToggleButton(table);
+
+        section.appendChild(heading);
+        section.appendChild(word);
+        section.appendChild(button);
+        section.appendChild(table);
+
+        return section;
+    }
+}
+
+function createDemonstrativeCard(distinction, distinctionData) {
+
+    const section = document.createElement("section");
+    section.classList.add("declension-card");
+
+    const heading = document.createElement("h5");
+    heading.textContent = distinction;
+
     const word = document.createElement("p");
-    word.textContent = pronounData.word;
+    word.textContent = distinctionData.word;
     word.classList.add("greek-word");
 
-    const table = createPronounTable(pronounData.declension);
+    const table = createPronounTable(distinctionData.declension);
     table.style.display = "none";
 
     const button = createToggleButton(table);
