@@ -285,29 +285,43 @@ function createComSupAdvType(type, adjSubData) {
     heading.textContent = type;
     section.appendChild(heading);
 
-    const word = document.createElement("p");
-    word.textContent = adjSubData.word;
-    word.classList.add("greek-word");
+    if (adjSubData.id === "irr_comSup") {
+        section.appendChild(heading);
 
-    section.appendChild(heading);
-    section.appendChild(word);
-
-    for (const subType of Object.keys(adjSubData)) {
-        if (subType === "word"){
-            continue;
-        } else if (subType !== "adverbial") {
-
-            const declension = adjSubData[subType];
-            const comSupAdvSection = createComSupSection(subType, declension);
-            section.appendChild(comSupAdvSection);
-            
-        } else {
-            const declension = adjSubData[subType];
-            const advSection = createAdvSection(declension);
-            section.appendChild(advSection);
+        for (const irrType of Object.keys(adjSubData)) {
+            if (irrType === "id") {
+                continue;
+            }
+            const irrComSupSection = createIrrComSupSection(irrType, adjSubData);
+            section.appendChild(irrComSupSection);
         }
+
+        return section;
+    } else {
+        const word = document.createElement("p");
+        word.textContent = adjSubData.word;
+        word.classList.add("greek-word");
+
+        section.appendChild(heading);
+        section.appendChild(word);
+
+        for (const subType of Object.keys(adjSubData)) {
+            if (subType === "id" || subType === "word"){
+                continue;
+            } else if (subType !== "adverbial") {
+
+                const declension = adjSubData[subType];
+                const comSupAdvSection = createComSupSection(subType, declension);
+                section.appendChild(comSupAdvSection);
+                
+            } else {
+                const declension = adjSubData[subType];
+                const advSection = createAdvSection(declension);
+                section.appendChild(advSection);
+            }
+        }
+        return section;
     }
-    return section;
 }
 
 function createComSupSection(subType, declension) {
@@ -345,6 +359,7 @@ function createAdvSection(declension) {
     section.appendChild(heading);
 
     const table = document.createElement("table");
+    table.style.display = "none";
 
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");
@@ -374,7 +389,7 @@ function createAdvSection(declension) {
         const wordCell = document.createElement("td");
         wordCell.textContent = declension[word];
         wordCell.classList.add("greek-word")
-        
+
         subRow.appendChild(wordCell);
     }
 
@@ -387,7 +402,65 @@ function createAdvSection(declension) {
 
     section.appendChild(button);
     section.appendChild(table);
+
+    return section;
+}
+
+function createIrrComSupSection(irrType, irrData) {
+
+    const section = document.createElement("section");
+    section.classList.add("declension-card");
+    
+    const word = document.createElement("h5");
+    word.textContent = irrType;
+    word.classList.add("greek-word");
+
+    section.appendChild(word)
+
+    const table = document.createElement("table");
     table.style.display = "none";
+
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
+
+    const baseRow = document.createElement("tr");
+
+    const baseCom = document.createElement("th");
+    baseCom.textContent = "比較級";
+    baseCom.scope = "col";
+
+    const baseSup = document.createElement("th");
+    baseSup.textContent = "最上級";
+    baseSup.scope = "col";
+
+    baseRow.appendChild(baseCom);
+    baseRow.appendChild(baseSup);
+    thead.appendChild(baseRow);
+
+    const subRow = document.createElement("tr");
+
+    for (const word of Object.keys(irrData[irrType])) {
+
+        if (word === "word") {
+            continue;
+        }
+
+        const wordCell = document.createElement("td");
+        wordCell.textContent = irrData[irrType][word];
+        wordCell.classList.add("greek-word")
+
+        subRow.appendChild(wordCell);
+    }
+
+    tbody.appendChild(subRow);
+
+    table.appendChild(thead)
+    table.appendChild(tbody)
+
+    const button = createToggleButton(table);
+
+    section.appendChild(button);
+    section.appendChild(table);
 
     return section;
 }
