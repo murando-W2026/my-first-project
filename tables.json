@@ -1530,6 +1530,7 @@
         "比較級・最上級・副詞形": {
             "id": "com_sup_adv",
             "通常型①": {
+                "id": "type1_comSup",
                 "word": "δίκαιος",
                 "comparative": {
                     "nom": {
@@ -1654,6 +1655,7 @@
                 }
             },
             "通常型②": {
+                "id": "type2_comSup",
                 "word": "κακός",
                 "comparative": {
                     "nom": {
