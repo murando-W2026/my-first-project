@@ -112,10 +112,8 @@ function createNounTable(declension) {
 }
 
 function createAllGenderCard(allGenderType, allGenderData) {
-    const section = document.createElement("section");
 
-    const heading = document.createElement("h4");
-    heading.textContent = allGenderType;
+    const section = document.createElement("section");
 
     if (allGenderData.id === "pronoun-demonstrative") {
 
@@ -130,10 +128,14 @@ function createAllGenderCard(allGenderType, allGenderData) {
             const distinctionSection = createDemonstrativeCard(distinction, distinctionData);
 
             section.appendChild(distinctionSection);
+
         }
         
         return section;
     } else {
+
+        const heading = document.createElement("h4");
+        heading.textContent = allGenderType;
 
         section.classList.add("declension-card");
 
