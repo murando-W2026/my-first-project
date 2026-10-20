@@ -143,14 +143,25 @@ function createAllGenderCard(allGenderType, allGenderData) {
         word.textContent = allGenderData.word;
         word.classList.add("greek-word");
 
-        const table = createAllGenderTable(allGenderData.declension);
-        table.style.display = "none";
+        if (allGenderData.id === "pronoun-personal") {
+            const table = createAllGenderTable(allGenderData.declension, 1);
+            table.style.display = "none";
 
-        const button = createToggleButton(table);
+            const button = createToggleButton(table);
 
-        section.appendChild(word);
-        section.appendChild(button);
-        section.appendChild(table);
+            section.appendChild(word);
+            section.appendChild(button);
+            section.appendChild(table);
+        } else {
+            const table = createAllGenderTable(allGenderData.declension, 0);
+            table.style.display = "none";
+
+            const button = createToggleButton(table);
+
+            section.appendChild(word);
+            section.appendChild(button);
+            section.appendChild(table);
+        }
 
         return section;
     }
@@ -181,7 +192,7 @@ function createDemonstrativeCard(distinction, distinctionData) {
     return section;
 }
 
-function createAllGenderTable(declension) {
+function createAllGenderTable(declension, exception) {
     const table = document.createElement("table");
 
     const thead = document.createElement("thead");
@@ -195,19 +206,26 @@ function createAllGenderTable(declension) {
     baseCase.scope = "col";
 
     const genderM = document.createElement("th");
-    genderM.textContent = "男性";
     genderM.colSpan = 2;
     genderM.scope = "col";
 
     const genderF = document.createElement("th");
-    genderF.textContent = "女性";
     genderF.colSpan = 2;
     genderF.scope = "col";
 
     const genderN = document.createElement("th");
-    genderN.textContent = "中性";
     genderN.colSpan = 2;
     genderN.scope = "col";
+
+    if (exception === 1) {
+        genderM.textContent = "一人称"; 
+        genderF.textContent = "二人称";
+        genderN.textContent = "三人称";
+    } else {
+        genderM.textContent = "男性"; 
+        genderF.textContent = "女性";
+        genderN.textContent = "中性";
+    }
 
     genderRow.appendChild(baseCase)
     genderRow.appendChild(genderM)
