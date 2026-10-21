@@ -1215,11 +1215,11 @@
         },
         "人称代名詞": {
             "id": "pronoun-personal",
-            "word": "",
+            "word": "ἐγώ, σύ",
             "declension": {
                 "nom": {
                     "1st": {
-                        "sg": "ἐγω",
+                        "sg": "ἐγώ",
                         "pl": "ἡμεῖς"
                     },
                     "2nd": {
